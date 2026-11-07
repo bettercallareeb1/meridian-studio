@@ -132,6 +132,7 @@ This is a server-rendered Next.js app with API routes and a PostgreSQL database,
 ## Repository and automatic deployments
 
 - **GitHub repository:** <https://github.com/bettercallareeb1/meridian-studio>
+- **Repository visibility:** Public
 - **Production branch:** `main`
 - **Vercel project:** `meridian-studio` (connected to the GitHub repository)
 - **Live deployment:** <https://meridian-studio-pi.vercel.app>
