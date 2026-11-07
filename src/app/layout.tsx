@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import "@fontsource/plus-jakarta-sans/400.css";
 import "@fontsource/plus-jakarta-sans/500.css";
@@ -10,10 +10,62 @@ import "@fontsource/jetbrains-mono/600.css";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 
+const SITE_URL =
+  process.env.NEXT_PUBLIC_APP_URL ??
+  (process.env.NODE_ENV === "production"
+    ? "https://meridian-studio-pi.vercel.app"
+    : "http://localhost:3000");
+
+const SITE_TITLE = "Meridian — Creative Studio Resource & Production Workspace";
+const SITE_DESCRIPTION =
+  "Editorial project management, deliverables workflow, and studio capacity planning for multidisciplinary design teams.";
+
 export const metadata: Metadata = {
-  title: "Meridian — Creative Studio Resource & Production Workspace",
-  description:
-    "Editorial project management, deliverables workflow, and studio capacity planning for multidisciplinary design teams.",
+  metadataBase: new URL(SITE_URL),
+  applicationName: "Meridian Studio OS",
+  title: {
+    default: SITE_TITLE,
+    template: "%s · Meridian Studio OS",
+  },
+  description: SITE_DESCRIPTION,
+  keywords: [
+    "creative studio",
+    "studio management",
+    "project management",
+    "resource planning",
+    "production workflow",
+    "design operations",
+  ],
+  authors: [{ name: "Meridian Creative Group" }],
+  creator: "Meridian Creative Group",
+  publisher: "Meridian Studio OS",
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "/",
+    siteName: "Meridian Studio OS",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Meridian",
+  },
+};
+
+export const viewport: Viewport = {
+  colorScheme: "light dark",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#F7F7F5" },
+    { media: "(prefers-color-scheme: dark)", color: "#0E0E11" },
+  ],
 };
 
 const THEME_INIT_SCRIPT = `
