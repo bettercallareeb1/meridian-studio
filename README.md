@@ -84,6 +84,8 @@ npm run db:push
 
 ## Deploying to Vercel
 
+The project is already live on Vercel at <https://meridian-studio-pi.vercel.app>. The steps below document how the current deployment is wired and how to recreate it on another Vercel account.
+
 1. Import the repository at <https://vercel.com/new>, or deploy with the CLI:
 
    ```bash
@@ -103,34 +105,59 @@ npm run db:push
 
 4. Redeploy if you added the environment variable after the first deployment.
 
-## Connect a Git repository
+### Deploying to a VPS or another Node host
 
-This workspace currently has a local Git repository but **no remote configured**. The initial commit is on `master`.
+This is a server-rendered Next.js app with API routes and a PostgreSQL database, so it needs Node.js hosting. Static shared hosting or plain cPanel file upload will not work.
 
-1. Create an empty repository on GitHub (for example `meridian-studio-os`).
-2. Add it as the remote and push:
-
-   ```bash
-   git remote add origin https://github.com/<your-account>/meridian-studio-os.git
-   git push -u origin master
-   ```
-
-   To use `main` instead of `master`:
+1. Use a VPS with Node.js 20+ (for example Ubuntu on DigitalOcean, Hetzner, or Contabo), or a Node platform such as Render or Railway.
+2. Clone the repository, install dependencies, and create production environment variables:
 
    ```bash
-   git branch -M main
-   git remote add origin https://github.com/<your-account>/meridian-studio-os.git
-   git push -u origin main
+   git clone https://github.com/bettercallareeb1/meridian-studio.git
+   cd meridian-studio
+   npm ci
    ```
 
-3. In Vercel, open the `meridian-studio` project and go to **Settings → Git → Connect Git Repository**. Install the Vercel GitHub app if the repository is not listed, then select it.
-4. Set the production branch to `master` or `main` to match what you pushed.
+3. Set `DATABASE_URL` to the Neon pooled URL, `DATABASE_URL_UNPOOLED` to the direct URL, and `NEXT_PUBLIC_APP_URL` to your public domain. Add the object-storage variables if you use file uploads.
+4. Push the schema once, then build and start:
 
-After the repository is connected, every push to the production branch deploys automatically. Pull requests get their own preview deployments. Until then, deploy manually with `vercel --prod`.
+   ```bash
+   npm run db:push
+   npm run build
+   npm start
+   ```
+
+5. Keep the process alive with `pm2` or a `systemd` service, and put Nginx or Caddy in front as a reverse proxy. Caddy can obtain and renew HTTPS certificates automatically. Point the domain's DNS at the server IP.
+
+## Repository and automatic deployments
+
+- **GitHub repository:** <https://github.com/bettercallareeb1/meridian-studio>
+- **Production branch:** `main`
+- **Vercel project:** `meridian-studio` (connected to the GitHub repository)
+- **Live deployment:** <https://meridian-studio-pi.vercel.app>
+
+The Vercel project is connected to GitHub, so every push to `main` starts a new production deployment automatically. Pull requests get their own preview URLs.
+
+```bash
+git status
+git add .
+git commit -m "Describe your change"
+git push
+```
+
+Use the GitHub identity that owns the repository (`bettercallareeb1`) for commits. Vercel blocks deployments from commit authors that do not have permission to deploy to the project.
+
+For a manual deployment, run:
+
+```bash
+vercel --prod
+```
+
+If automatic deployments stop working, open the Vercel project and check **Settings → Git** to confirm the repository and production branch are still connected.
 
 ## Custom domain
 
-You can attach a domain you already own, or buy one from a registrar such as Cloudflare Registrar, Namecheap, or Porkbun.
+No custom domain is attached yet; the site currently uses the Vercel URL. You can attach a domain you already own, or buy one from a registrar such as Cloudflare Registrar, Namecheap, or Porkbun.
 
 1. In Vercel, open the `meridian-studio` project and go to **Settings → Domains**.
 2. Enter the domain, for example `meridian.studio`, and click **Add**.
