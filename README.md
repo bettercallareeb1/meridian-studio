@@ -21,6 +21,7 @@ A full-stack creative-studio resource and production workspace built with Next.j
 | Project avatar | `public/brand/meridian-avatar.png` | GitHub profile/org avatar, social profiles, app icon |
 | Social banner | `public/brand/meridian-social.png` | GitHub repository social preview, Open Graph/Twitter |
 | Browser icon | `src/app/icon.svg` | Favicon / browser tab |
+| Favicon fallback | `src/app/favicon.ico` | Legacy `/favicon.ico` requests |
 | Apple touch icon | `src/app/apple-icon.png` | iOS home-screen icon (180×180) |
 | Social preview | `src/app/opengraph-image.png`, `src/app/twitter-image.png` | Link previews (1200×630) |
 | PWA icons | `public/icons/icon-192.png`, `icon-512.png`, `icon-maskable-512.png` | Installable app manifest |
